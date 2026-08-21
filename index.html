@@ -1,0 +1,1988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NovaShop — Modern E-Commerce</title>
+
+<style>
+:root{
+  --primary:#6c5ce7;
+  --secondary:#00cec9;
+  --danger:#ff4757;
+  --success:#00b894;
+  --warning:#fdcb6e;
+  --bg:#f5f6fa;
+  --card:#fff;
+  --text:#222;
+  --muted:#777;
+  --border:#e8e8ef;
+  --shadow:0 12px 35px rgba(0,0,0,.08);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:Inter,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  transition:.3s;
+}
+
+body.dark{
+  --bg:#11131a;
+  --card:#1b1e27;
+  --text:#f5f5f5;
+  --muted:#aaa;
+  --border:#303440;
+  --shadow:0 12px 35px rgba(0,0,0,.3);
+}
+
+button,input,select,textarea{font:inherit}
+
+button{
+  border:0;
+  cursor:pointer;
+}
+
+.container{
+  width:min(1200px,92%);
+  margin:auto;
+}
+
+/* HEADER */
+header{
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:rgba(255,255,255,.94);
+  backdrop-filter:blur(15px);
+  border-bottom:1px solid var(--border);
+}
+
+.dark header{background:rgba(27,30,39,.94)}
+
+.nav{
+  min-height:72px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+}
+
+.logo{
+  font-size:25px;
+  font-weight:900;
+  color:var(--primary);
+}
+
+.logo span{color:var(--secondary)}
+
+.nav-actions{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.icon-btn{
+  width:43px;
+  height:43px;
+  border-radius:50%;
+  background:var(--bg);
+  color:var(--text);
+  position:relative;
+}
+
+.badge{
+  position:absolute;
+  top:-4px;
+  right:-2px;
+  min-width:19px;
+  height:19px;
+  padding:0 5px;
+  border-radius:20px;
+  background:var(--danger);
+  color:white;
+  font-size:11px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+/* HERO */
+.hero{
+  margin:30px 0;
+  padding:55px;
+  border-radius:28px;
+  color:white;
+  background:
+    radial-gradient(circle at 80% 20%,rgba(255,255,255,.25),transparent 25%),
+    linear-gradient(135deg,#6c5ce7,#00cec9);
+  overflow:hidden;
+}
+
+.hero h1{
+  font-size:clamp(34px,6vw,65px);
+  line-height:1;
+  max-width:700px;
+  margin-bottom:18px;
+}
+
+.hero p{
+  max-width:600px;
+  font-size:18px;
+  opacity:.92;
+  margin-bottom:25px;
+}
+
+.hero-btn{
+  background:white;
+  color:#5f4ee8;
+  padding:14px 22px;
+  border-radius:12px;
+  font-weight:800;
+}
+
+/* SEARCH */
+.search-area{
+  display:flex;
+  gap:12px;
+  margin-bottom:25px;
+}
+
+.search{
+  flex:1;
+  padding:15px 18px;
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text);
+  border-radius:14px;
+  outline:none;
+}
+
+.search:focus{
+  border-color:var(--primary);
+}
+
+.filter-btn{
+  padding:0 20px;
+  border-radius:14px;
+  background:var(--primary);
+  color:white;
+}
+
+/* CATEGORIES */
+.categories{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  padding-bottom:10px;
+  margin-bottom:25px;
+}
+
+.cat{
+  white-space:nowrap;
+  padding:10px 17px;
+  border-radius:30px;
+  background:var(--card);
+  border:1px solid var(--border);
+  color:var(--text);
+}
+
+.cat.active{
+  background:var(--primary);
+  color:white;
+}
+
+/* TOOLBAR */
+.toolbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:20px;
+}
+
+.toolbar select{
+  padding:10px 14px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:var(--card);
+  color:var(--text);
+}
+
+/* PRODUCTS */
+.products{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
+}
+
+.product{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow:var(--shadow);
+  transition:.25s;
+}
+
+.product:hover{
+  transform:translateY(-5px);
+}
+
+.product-img{
+  height:220px;
+  background:#f0f0f5;
+  position:relative;
+  overflow:hidden;
+}
+
+.dark .product-img{background:#292d38}
+
+.product-img img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.wish{
+  position:absolute;
+  right:12px;
+  top:12px;
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  background:rgba(255,255,255,.9);
+  color:#555;
+}
+
+.wish.active{
+  color:var(--danger);
+}
+
+.product-info{
+  padding:17px;
+}
+
+.category{
+  color:var(--primary);
+  font-size:12px;
+  font-weight:bold;
+  text-transform:uppercase;
+}
+
+.product h3{
+  margin:6px 0;
+  font-size:17px;
+}
+
+.rating{
+  color:#f39c12;
+  margin:7px 0;
+}
+
+.price{
+  font-size:20px;
+  font-weight:900;
+}
+
+.old-price{
+  color:#999;
+  text-decoration:line-through;
+  font-size:13px;
+  margin-left:5px;
+}
+
+.product-actions{
+  display:flex;
+  gap:8px;
+  margin-top:14px;
+}
+
+.add{
+  flex:1;
+  padding:11px;
+  background:var(--primary);
+  color:white;
+  border-radius:10px;
+  font-weight:bold;
+}
+
+.view{
+  width:44px;
+  border-radius:10px;
+  background:var(--bg);
+  color:var(--text);
+}
+
+/* CART */
+.drawer{
+  position:fixed;
+  right:-430px;
+  top:0;
+  width:min(430px,100%);
+  height:100vh;
+  background:var(--card);
+  z-index:300;
+  box-shadow:-15px 0 50px rgba(0,0,0,.2);
+  transition:.3s;
+  display:flex;
+  flex-direction:column;
+}
+
+.drawer.open{right:0}
+
+.drawer-head{
+  padding:20px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  justify-content:space-between;
+}
+
+.cart-items{
+  flex:1;
+  overflow:auto;
+  padding:15px;
+}
+
+.cart-item{
+  display:flex;
+  gap:12px;
+  padding:12px 0;
+  border-bottom:1px solid var(--border);
+}
+
+.cart-item img{
+  width:70px;
+  height:70px;
+  border-radius:12px;
+  object-fit:cover;
+}
+
+.qty{
+  display:flex;
+  gap:7px;
+  align-items:center;
+  margin-top:8px;
+}
+
+.qty button{
+  width:26px;
+  height:26px;
+  border-radius:7px;
+  background:var(--bg);
+  color:var(--text);
+}
+
+.cart-footer{
+  padding:20px;
+  border-top:1px solid var(--border);
+}
+
+.total{
+  display:flex;
+  justify-content:space-between;
+  font-size:22px;
+  font-weight:900;
+  margin-bottom:15px;
+}
+
+.checkout{
+  width:100%;
+  padding:15px;
+  border-radius:12px;
+  background:var(--success);
+  color:white;
+  font-weight:bold;
+}
+
+/* MODALS */
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  z-index:250;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.overlay.show{display:flex}
+
+.modal{
+  width:min(650px,100%);
+  max-height:90vh;
+  overflow:auto;
+  background:var(--card);
+  border-radius:22px;
+  padding:25px;
+  position:relative;
+}
+
+.close{
+  position:absolute;
+  right:18px;
+  top:18px;
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  background:var(--bg);
+  color:var(--text);
+}
+
+.modal h2{
+  margin-bottom:20px;
+}
+
+/* ADMIN */
+.admin{
+  display:none;
+  padding:30px 0 60px;
+}
+
+.admin.show{display:block}
+
+.admin-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
+  margin-bottom:25px;
+}
+
+.stat{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px;
+}
+
+.stat small{color:var(--muted)}
+.stat strong{
+  display:block;
+  font-size:30px;
+  margin-top:5px;
+}
+
+.admin-panel{
+  background:var(--card);
+  padding:22px;
+  border-radius:20px;
+  border:1px solid var(--border);
+}
+
+.admin-form{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+
+.admin-form input,
+.admin-form textarea,
+.admin-form select{
+  width:100%;
+  padding:13px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:var(--bg);
+  color:var(--text);
+}
+
+.admin-form textarea{
+  min-height:100px;
+  grid-column:1/-1;
+}
+
+.full{grid-column:1/-1}
+
+.primary{
+  background:var(--primary);
+  color:white;
+  padding:13px 18px;
+  border-radius:10px;
+}
+
+.admin-table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:25px;
+}
+
+.admin-table th,
+.admin-table td{
+  text-align:left;
+  padding:12px 8px;
+  border-bottom:1px solid var(--border);
+}
+
+.edit{
+  background:#0984e3;
+  color:white;
+  padding:7px 10px;
+  border-radius:7px;
+}
+
+.delete{
+  background:var(--danger);
+  color:white;
+  padding:7px 10px;
+  border-radius:7px;
+}
+
+/* CHECKOUT */
+.form-group{
+  margin-bottom:14px;
+}
+
+.form-group label{
+  display:block;
+  margin-bottom:6px;
+  font-weight:bold;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select{
+  width:100%;
+  padding:13px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:var(--bg);
+  color:var(--text);
+}
+
+.place-order{
+  width:100%;
+  padding:14px;
+  border-radius:10px;
+  background:var(--success);
+  color:white;
+  font-weight:bold;
+}
+
+/* TOAST */
+.toast{
+  position:fixed;
+  bottom:25px;
+  left:50%;
+  transform:translate(-50%,120px);
+  background:#222;
+  color:white;
+  padding:13px 20px;
+  border-radius:12px;
+  z-index:500;
+  transition:.3s;
+}
+
+.toast.show{
+  transform:translate(-50%,0);
+}
+
+/* EMPTY */
+.empty{
+  text-align:center;
+  padding:50px;
+  color:var(--muted);
+  grid-column:1/-1;
+}
+
+/* FOOTER */
+footer{
+  margin-top:60px;
+  padding:35px 0;
+  text-align:center;
+  border-top:1px solid var(--border);
+  color:var(--muted);
+}
+
+/* RESPONSIVE */
+@media(max-width:1000px){
+  .products{grid-template-columns:repeat(3,1fr)}
+  .admin-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+@media(max-width:700px){
+  .products{grid-template-columns:repeat(2,1fr);gap:12px}
+  .product-img{height:180px}
+  .hero{padding:35px 25px}
+  .admin-form{grid-template-columns:1fr}
+  .admin-form textarea,.full{grid-column:auto}
+}
+
+@media(max-width:480px){
+  .products{grid-template-columns:1fr 1fr}
+  .product-img{height:150px}
+  .product-info{padding:12px}
+  .search-area{flex-direction:column}
+  .filter-btn{height:45px}
+  .admin-grid{grid-template-columns:1fr}
+  .nav .logo{font-size:21px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="container nav">
+    <div class="logo">Nova<span>Shop</span></div>
+
+    <div class="nav-actions">
+      <button class="icon-btn" onclick="toggleTheme()" title="Theme">🌙</button>
+      <button class="icon-btn" onclick="showWishlist()" title="Wishlist">
+        ❤️
+        <span class="badge" id="wishCount">0</span>
+      </button>
+      <button class="icon-btn" onclick="openCart()" title="Cart">
+        🛒
+        <span class="badge" id="cartCount">0</span>
+      </button>
+      <button class="icon-btn" onclick="openAdmin()" title="Admin">⚙️</button>
+    </div>
+  </div>
+</header>
+
+<main id="shopPage">
+
+<div class="container">
+
+  <section class="hero">
+    <h1>Shop smarter. Live better.</h1>
+    <p>
+      Discover unique products, exciting deals and a modern shopping
+      experience built for everyone.
+    </p>
+    <button class="hero-btn" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
+      Explore Products →
+    </button>
+  </section>
+
+  <section class="search-area">
+    <input
+      class="search"
+      id="search"
+      placeholder="🔎 Search products..."
+      oninput="renderProducts()"
+    >
+    <button class="filter-btn" onclick="randomProduct()">✨ Surprise Me</button>
+  </section>
+
+  <div class="categories" id="categories"></div>
+
+  <div class="toolbar">
+    <strong id="resultCount">Products</strong>
+
+    <select id="sort" onchange="renderProducts()">
+      <option value="default">Sort: Featured</option>
+      <option value="low">Price: Low → High</option>
+      <option value="high">Price: High → Low</option>
+      <option value="rating">Top Rated</option>
+      <option value="name">Name A → Z</option>
+    </select>
+  </div>
+
+  <section class="products" id="products"></section>
+
+</div>
+</main>
+
+<!-- ADMIN -->
+<section class="admin" id="adminPage">
+<div class="container">
+
+  <div class="toolbar">
+    <div>
+      <h1>⚙️ Admin Dashboard</h1>
+      <p style="color:var(--muted)">Manage your NovaShop store</p>
+    </div>
+    <button class="primary" onclick="closeAdmin()">← Back To Shop</button>
+  </div>
+
+  <div class="admin-grid">
+    <div class="stat">
+      <small>Total Products</small>
+      <strong id="statProducts">0</strong>
+    </div>
+
+    <div class="stat">
+      <small>Categories</small>
+      <strong id="statCategories">0</strong>
+    </div>
+
+    <div class="stat">
+      <small>Cart Items</small>
+      <strong id="statCart">0</strong>
+    </div>
+
+    <div class="stat">
+      <small>Store Value</small>
+      <strong id="statValue">₹0</strong>
+    </div>
+  </div>
+
+  <div class="admin-panel">
+    <h2 id="formTitle">➕ Add New Product</h2>
+
+    <form class="admin-form" onsubmit="saveProduct(event)">
+
+      <input type="hidden" id="editId">
+
+      <input id="pName" required placeholder="Product Name">
+
+      <input id="pPrice" required type="number" min="0" placeholder="Price">
+
+      <select id="pCategory">
+        <option>Electronics</option>
+        <option>Fashion</option>
+        <option>Home</option>
+        <option>Beauty</option>
+        <option>Sports</option>
+        <option>Accessories</option>
+        <option>Food</option>
+      </select>
+
+      <input id="pStock" required type="number" min="0" placeholder="Stock">
+
+      <input id="pImage" class="full"
+        placeholder="Image URL (optional)">
+
+      <textarea id="pDescription"
+        placeholder="Product description"></textarea>
+
+      <button class="primary full" type="submit">
+        💾 Save Product
+      </button>
+
+    </form>
+
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Price</th>
+          <th>Category</th>
+          <th>Stock</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="adminProducts"></tbody>
+    </table>
+
+  </div>
+
+</div>
+</section>
+
+<!-- CART -->
+<aside class="drawer" id="cartDrawer">
+
+  <div class="drawer-head">
+    <h2>🛒 Your Cart</h2>
+    <button class="icon-btn" onclick="closeCart()">✕</button>
+  </div>
+
+  <div class="cart-items" id="cartItems"></div>
+
+  <div class="cart-footer">
+    <div class="total">
+      <span>Total</span>
+      <span id="cartTotal">₹0</span>
+    </div>
+
+    <button class="checkout" onclick="openCheckout()">
+      Proceed To Checkout →
+    </button>
+  </div>
+
+</aside>
+
+<!-- PRODUCT MODAL -->
+<div class="overlay" id="productModal">
+  <div class="modal">
+    <button class="close" onclick="closeModal('productModal')">✕</button>
+    <div id="productDetails"></div>
+  </div>
+</div>
+
+<!-- CHECKOUT -->
+<div class="overlay" id="checkoutModal">
+  <div class="modal">
+
+    <button class="close" onclick="closeModal('checkoutModal')">✕</button>
+
+    <h2>🧾 Checkout</h2>
+
+    <form onsubmit="placeOrder(event)">
+
+      <div class="form-group">
+        <label>Full Name</label>
+        <input id="customerName" required placeholder="Your name">
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" required placeholder="you@example.com">
+      </div>
+
+      <div class="form-group">
+        <label>Phone</label>
+        <input required placeholder="+91 XXXXX XXXXX">
+      </div>
+
+      <div class="form-group">
+        <label>Delivery Address</label>
+        <textarea required placeholder="Full delivery address"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Payment Method</label>
+        <select>
+          <option>Cash On Delivery</option>
+          <option>UPI</option>
+          <option>Credit / Debit Card</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Coupon</label>
+        <input id="coupon" placeholder="Try: NOVA10">
+      </div>
+
+      <button class="place-order">
+        🎉 Place Order
+      </button>
+
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<footer>
+  <div class="container">
+    <p>© 2026 NovaShop — Modern Shopping Experience</p>
+    <p style="margin-top:8px">Built with HTML, CSS & JavaScript</p>
+  </div>
+</footer>
+
+<script>
+/* ============================
+   DEFAULT PRODUCTS
+============================ */
+
+const defaultProducts = [
+ {
+  id:1,
+  name:"Aurora Wireless Headphones",
+  price:2499,
+  category:"Electronics",
+  stock:15,
+  rating:4.8,
+  image:"https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=700&q=80",
+  description:"Premium wireless headphones with deep bass and comfortable ear cushions."
+ },
+ {
+  id:2,
+  name:"Urban Smart Watch",
+  price:3299,
+  category:"Electronics",
+  stock:20,
+  rating:4.7,
+  image:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=700&q=80",
+  description:"Smart fitness watch with activity tracking and modern design."
+ },
+ {
+  id:3,
+  name:"Minimal Backpack",
+  price:1799,
+  category:"Fashion",
+  stock:30,
+  rating:4.6,
+  image:"https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=700&q=80",
+  description:"Lightweight everyday backpack for travel, school and work."
+ },
+ {
+  id:4,
+  name:"Cloud Sneakers",
+  price:2199,
+  category:"Fashion",
+  stock:18,
+  rating:4.9,
+  image:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=80",
+  description:"Comfortable everyday sneakers with a lightweight sole."
+ },
+ {
+  id:5,
+  name:"Nordic Table Lamp",
+  price:1299,
+  category:"Home",
+  stock:12,
+  rating:4.5,
+  image:"https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=700&q=80",
+  description:"Elegant ambient lamp inspired by Scandinavian interiors."
+ },
+ {
+  id:6,
+  name:"Smart Coffee Maker",
+  price:4999,
+  category:"Home",
+  stock:8,
+  rating:4.8,
+  image:"https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?auto=format&fit=crop&w=700&q=80",
+  description:"Modern coffee maker for delicious coffee at home."
+ },
+ {
+  id:7,
+  name:"Glow Face Serum",
+  price:899,
+  category:"Beauty",
+  stock:25,
+  rating:4.7,
+  image:"https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=700&q=80",
+  description:"Lightweight skincare serum designed for a radiant look."
+ },
+ {
+  id:8,
+  name:"Yoga Comfort Mat",
+  price:999,
+  category:"Sports",
+  stock:22,
+  rating:4.6,
+  image:"https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?auto=format&fit=crop&w=700&q=80",
+  description:"Soft, non-slip yoga mat for comfortable workouts."
+ },
+ {
+  id:9,
+  name:"Classic Sunglasses",
+  price:799,
+  category:"Accessories",
+  stock:40,
+  rating:4.4,
+  image:"https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=700&q=80",
+  description:"Classic sunglasses with a timeless everyday style."
+ },
+ {
+  id:10,
+  name:"Organic Green Tea",
+  price:499,
+  category:"Food",
+  stock:50,
+  rating:4.8,
+  image:"https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=700&q=80",
+  description:"Refreshing premium green tea for your daily routine."
+ },
+ {
+  id:11,
+  name:"Mechanical Keyboard",
+  price:3599,
+  category:"Electronics",
+  stock:14,
+  rating:4.9,
+  image:"https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=700&q=80",
+  description:"Responsive mechanical keyboard with satisfying switches."
+ },
+ {
+  id:12,
+  name:"Portable Bluetooth Speaker",
+  price:1599,
+  category:"Electronics",
+  stock:25,
+  rating:4.6,
+  image:"https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?auto=format&fit=crop&w=700&q=80",
+  description:"Compact speaker with powerful sound."
+ },
+ {
+  id:13,
+  name:"Ceramic Vase",
+  price:699,
+  category:"Home",
+  stock:18,
+  rating:4.3,
+  image:"https://images.unsplash.com/photo-1578500494198-246f612d3b3d?auto=format&fit=crop&w=700&q=80",
+  description:"Minimal ceramic vase for modern homes."
+ },
+ {
+  id:14,
+  name:"Leather Wallet",
+  price:1099,
+  category:"Accessories",
+  stock:28,
+  rating:4.7,
+  image:"https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&w=700&q=80",
+  description:"Compact premium-style wallet."
+ },
+ {
+  id:15,
+  name:"Fitness Resistance Bands",
+  price:599,
+  category:"Sports",
+  stock:35,
+  rating:4.5,
+  image:"https://images.unsplash.com/photo-1598289431512-b97b0917affc?auto=format&fit=crop&w=700&q=80",
+  description:"Portable resistance bands for home workouts."
+ },
+ {
+  id:16,
+  name:"Oversized Hoodie",
+  price:1499,
+  category:"Fashion",
+  stock:17,
+  rating:4.8,
+  image:"https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=700&q=80",
+  description:"Soft oversized hoodie with a relaxed fit."
+ },
+ {
+  id:17,
+  name:"Desk Organizer",
+  price:449,
+  category:"Home",
+  stock:45,
+  rating:4.4,
+  image:"https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&w=700&q=80",
+  description:"Keep your workspace clean and organized."
+ },
+ {
+  id:18,
+  name:"Essential Perfume",
+  price:1899,
+  category:"Beauty",
+  stock:10,
+  rating:4.9,
+  image:"https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=700&q=80",
+  description:"Elegant fragrance for everyday occasions."
+ },
+ {
+  id:19,
+  name:"Travel Mug",
+  price:699,
+  category:"Home",
+  stock:30,
+  rating:4.5,
+  image:"https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?auto=format&fit=crop&w=700&q=80",
+  description:"Leak-resistant mug for coffee and tea on the go."
+ },
+ {
+  id:20,
+  name:"Running Cap",
+  price:399,
+  category:"Sports",
+  stock:24,
+  rating:4.2,
+  image:"https://images.unsplash.com/photo-1521369909029-2afed882baee?auto=format&fit=crop&w=700&q=80",
+  description:"Lightweight breathable cap for outdoor activity."
+ },
+ {
+  id:21,
+  name:"Mini Projector",
+  price:6999,
+  category:"Electronics",
+  stock:7,
+  rating:4.7,
+  image:"https://images.unsplash.com/photo-1626379953822-baec19c3accd?auto=format&fit=crop&w=700&q=80",
+  description:"Portable projector for movie nights and presentations."
+ },
+ {
+  id:22,
+  name:"Canvas Tote Bag",
+  price:499,
+  category:"Fashion",
+  stock:38,
+  rating:4.4,
+  image:"https://images.unsplash.com/photo-1594223274512-ad4803739b7c?auto=format&fit=crop&w=700&q=80",
+  description:"Reusable canvas tote for everyday shopping."
+ },
+ {
+  id:23,
+  name:"Aroma Diffuser",
+  price:1199,
+  category:"Home",
+  stock:13,
+  rating:4.8,
+  image:"https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=700&q=80",
+  description:"Create a relaxing atmosphere with aromatic mist."
+ },
+ {
+  id:24,
+  name:"Skincare Travel Kit",
+  price:1299,
+  category:"Beauty",
+  stock:16,
+  rating:4.6,
+  image:"https://images.unsplash.com/photo-1556229010-6c3f2c9ca5f8?auto=format&fit=crop&w=700&q=80",
+  description:"Convenient skincare essentials for travel."
+ },
+ {
+  id:25,
+  name:"Premium Notebook",
+  price:349,
+  category:"Accessories",
+  stock:60,
+  rating:4.7,
+  image:"https://images.unsplash.com/photo-1531346680769-a1d79b57de5b?auto=format&fit=crop&w=700&q=80",
+  description:"Premium notebook for ideas, notes and journaling."
+ }
+];
+
+/* ============================
+   STORAGE
+============================ */
+
+let products =
+  JSON.parse(localStorage.getItem("novaProducts")) ||
+  defaultProducts;
+
+let cart =
+  JSON.parse(localStorage.getItem("novaCart")) || [];
+
+let wishlist =
+  JSON.parse(localStorage.getItem("novaWishlist")) || [];
+
+let currentCategory = "All";
+
+/* ============================
+   INIT
+============================ */
+
+function init(){
+  renderCategories();
+  renderProducts();
+  updateCart();
+  updateWishlist();
+  updateAdmin();
+}
+
+init();
+
+/* ============================
+   PRODUCTS
+============================ */
+
+function renderProducts(){
+
+  const search =
+    document.getElementById("search").value.toLowerCase();
+
+  const sort =
+    document.getElementById("sort").value;
+
+  let list = products.filter(p => {
+
+    const matchesSearch =
+      p.name.toLowerCase().includes(search) ||
+      p.category.toLowerCase().includes(search);
+
+    const matchesCategory =
+      currentCategory === "All" ||
+      p.category === currentCategory;
+
+    return matchesSearch && matchesCategory;
+  });
+
+  if(sort === "low")
+    list.sort((a,b)=>a.price-b.price);
+
+  if(sort === "high")
+    list.sort((a,b)=>b.price-a.price);
+
+  if(sort === "rating")
+    list.sort((a,b)=>b.rating-a.rating);
+
+  if(sort === "name")
+    list.sort((a,b)=>a.name.localeCompare(b.name));
+
+  document.getElementById("resultCount").textContent =
+    `${list.length} Product${list.length!==1?"s":""}`;
+
+  const container =
+    document.getElementById("products");
+
+  if(!list.length){
+    container.innerHTML =
+      `<div class="empty">
+        <h2>😕 No products found</h2>
+        <p>Try another search or category.</p>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = list.map(productCard).join("");
+}
+
+function productCard(p){
+
+  const liked = wishlist.includes(p.id);
+
+  return `
+  <article class="product">
+
+    <div class="product-img">
+
+      <img
+        src="${escapeHTML(p.image)}"
+        alt="${escapeHTML(p.name)}"
+        onerror="this.src='https://placehold.co/700x500/6c5ce7/ffffff?text=Product'"
+      >
+
+      <button
+        class="wish ${liked?"active":""}"
+        onclick="toggleWishlist(${p.id})">
+        ${liked?"❤️":"♡"}
+      </button>
+
+    </div>
+
+    <div class="product-info">
+
+      <div class="category">${escapeHTML(p.category)}</div>
+
+      <h3>${escapeHTML(p.name)}</h3>
+
+      <div class="rating">
+        ${stars(p.rating)}
+        <small>(${p.rating})</small>
+      </div>
+
+      <div>
+        <span class="price">₹${p.price.toLocaleString()}</span>
+      </div>
+
+      <div class="product-actions">
+
+        <button
+          class="add"
+          onclick="addToCart(${p.id})"
+          ${p.stock<=0?"disabled":""}>
+          ${p.stock>0?"🛒 Add":"Sold Out"}
+        </button>
+
+        <button
+          class="view"
+          onclick="viewProduct(${p.id})">
+          👁️
+        </button>
+
+      </div>
+
+    </div>
+
+  </article>
+  `;
+}
+
+function stars(rating){
+  const full = Math.round(rating);
+  return "★".repeat(full) + "☆".repeat(5-full);
+}
+
+/* ============================
+   CATEGORIES
+============================ */
+
+function renderCategories(){
+
+  const categories = [
+    "All",
+    ...new Set(products.map(p=>p.category))
+  ];
+
+  document.getElementById("categories").innerHTML =
+    categories.map(c=>`
+      <button
+        class="cat ${currentCategory===c?"active":""}"
+        onclick="setCategory('${escapeJS(c)}')">
+        ${escapeHTML(c)}
+      </button>
+    `).join("");
+}
+
+function setCategory(category){
+  currentCategory = category;
+  renderCategories();
+  renderProducts();
+}
+
+/* ============================
+   CART
+============================ */
+
+function addToCart(id){
+
+  const product = products.find(p=>p.id===id);
+
+  if(!product || product.stock<=0){
+    toast("Product is out of stock");
+    return;
+  }
+
+  const existing = cart.find(item=>item.id===id);
+
+  if(existing){
+    if(existing.qty >= product.stock){
+      toast("Maximum available stock reached");
+      return;
+    }
+    existing.qty++;
+  }else{
+    cart.push({id,qty:1});
+  }
+
+  saveCart();
+  updateCart();
+  toast("🛒 Added to cart!");
+}
+
+function changeQty(id,amount){
+
+  const item = cart.find(x=>x.id===id);
+
+  if(!item)return;
+
+  const product = products.find(p=>p.id===id);
+
+  item.qty += amount;
+
+  if(item.qty<=0){
+    cart = cart.filter(x=>x.id!==id);
+  }
+
+  if(product && item.qty>product.stock){
+    item.qty=product.stock;
+    toast("Stock limit reached");
+  }
+
+  saveCart();
+  updateCart();
+}
+
+function updateCart(){
+
+  const container =
+    document.getElementById("cartItems");
+
+  let total = 0;
+  let count = 0;
+
+  if(!cart.length){
+    container.innerHTML =
+      `<div class="empty">
+        <h2>🛒 Cart is empty</h2>
+        <p>Add something awesome!</p>
+      </div>`;
+  }else{
+
+    container.innerHTML =
+      cart.map(item=>{
+
+        const p =
+          products.find(x=>x.id===item.id);
+
+        if(!p)return "";
+
+        const subtotal =
+          p.price * item.qty;
+
+        total += subtotal;
+        count += item.qty;
+
+        return `
+        <div class="cart-item">
+
+          <img
+            src="${escapeHTML(p.image)}"
+            onerror="this.src='https://placehold.co/100x100/6c5ce7/fff?text=Item'"
+          >
+
+          <div style="flex:1">
+            <strong>${escapeHTML(p.name)}</strong>
+
+            <div style="color:var(--muted);margin-top:4px">
+              ₹${p.price.toLocaleString()}
+            </div>
+
+            <div class="qty">
+              <button onclick="changeQty(${p.id},-1)">−</button>
+              <strong>${item.qty}</strong>
+              <button onclick="changeQty(${p.id},1)">+</button>
+              <button
+                onclick="removeCart(${p.id})"
+                style="margin-left:8px;color:#ff4757">
+                🗑️
+              </button>
+            </div>
+          </div>
+
+          <strong>₹${subtotal.toLocaleString()}</strong>
+
+        </div>
+        `;
+      }).join("");
+  }
+
+  document.getElementById("cartTotal").textContent =
+    `₹${total.toLocaleString()}`;
+
+  document.getElementById("cartCount").textContent =
+    count;
+
+  document.getElementById("statCart").textContent =
+    count;
+}
+
+function removeCart(id){
+  cart = cart.filter(x=>x.id!==id);
+  saveCart();
+  updateCart();
+  toast("Removed from cart");
+}
+
+function saveCart(){
+  localStorage.setItem(
+    "novaCart",
+    JSON.stringify(cart)
+  );
+}
+
+function openCart(){
+  document.getElementById("cartDrawer")
+    .classList.add("open");
+}
+
+function closeCart(){
+  document.getElementById("cartDrawer")
+    .classList.remove("open");
+}
+
+/* ============================
+   WISHLIST
+============================ */
+
+function toggleWishlist(id){
+
+  if(wishlist.includes(id)){
+    wishlist =
+      wishlist.filter(x=>x!==id);
+    toast("Removed from wishlist");
+  }else{
+    wishlist.push(id);
+    toast("❤️ Added to wishlist");
+  }
+
+  localStorage.setItem(
+    "novaWishlist",
+    JSON.stringify(wishlist)
+  );
+
+  updateWishlist();
+  renderProducts();
+}
+
+function updateWishlist(){
+  document.getElementById("wishCount")
+    .textContent = wishlist.length;
+}
+
+function showWishlist(){
+
+  currentCategory="All";
+
+  const likedProducts =
+    products.filter(p=>wishlist.includes(p.id));
+
+  if(!likedProducts.length){
+    toast("Your wishlist is empty ❤️");
+    return;
+  }
+
+  document.getElementById("products").innerHTML =
+    likedProducts.map(productCard).join("");
+
+  document.getElementById("resultCount")
+    .textContent = "❤️ Wishlist";
+}
+
+/* ============================
+   PRODUCT MODAL
+============================ */
+
+function viewProduct(id){
+
+  const p =
+    products.find(x=>x.id===id);
+
+  if(!p)return;
+
+  document.getElementById("productDetails").innerHTML = `
+
+    <img
+      src="${escapeHTML(p.image)}"
+      style="width:100%;height:300px;object-fit:cover;border-radius:15px"
+      onerror="this.src='https://placehold.co/700x400/6c5ce7/fff?text=Product'"
+    >
+
+    <div style="margin-top:20px">
+
+      <div class="category">
+        ${escapeHTML(p.category)}
+      </div>
+
+      <h1 style="margin:7px 0">
+        ${escapeHTML(p.name)}
+      </h1>
+
+      <div class="rating">
+        ${stars(p.rating)}
+        ${p.rating}
+      </div>
+
+      <h2 style="margin:12px 0;color:var(--primary)">
+        ₹${p.price.toLocaleString()}
+      </h2>
+
+      <p style="color:var(--muted);line-height:1.7">
+        ${escapeHTML(p.description || "Premium quality product.")}
+      </p>
+
+      <p style="margin-top:15px">
+        <strong>Stock:</strong> ${p.stock}
+      </p>
+
+      <button
+        class="add"
+        style="width:100%;margin-top:20px"
+        onclick="addToCart(${p.id});closeModal('productModal')">
+        🛒 Add To Cart
+      </button>
+
+    </div>
+  `;
+
+  document.getElementById("productModal")
+    .classList.add("show");
+}
+
+/* ============================
+   CHECKOUT
+============================ */
+
+function openCheckout(){
+
+  if(!cart.length){
+    toast("Your cart is empty");
+    return;
+  }
+
+  document.getElementById("checkoutModal")
+    .classList.add("show");
+}
+
+function placeOrder(event){
+
+  event.preventDefault();
+
+  const coupon =
+    document.getElementById("coupon").value.trim().toUpperCase();
+
+  if(coupon === "NOVA10"){
+    toast("🎉 Order placed with 10% discount!");
+  }else{
+    toast("🎉 Order placed successfully!");
+  }
+
+  cart=[];
+  saveCart();
+  updateCart();
+
+  closeModal("checkoutModal");
+  closeCart();
+
+  event.target.reset();
+}
+
+/* ============================
+   ADMIN
+============================ */
+
+function openAdmin(){
+
+  document.getElementById("shopPage")
+    .style.display="none";
+
+  document.getElementById("adminPage")
+    .classList.add("show");
+
+  updateAdmin();
+}
+
+function closeAdmin(){
+
+  document.getElementById("adminPage")
+    .classList.remove("show");
+
+  document.getElementById("shopPage")
+    .style.display="block";
+
+  renderCategories();
+  renderProducts();
+}
+
+function saveProduct(event){
+
+  event.preventDefault();
+
+  const id =
+    document.getElementById("editId").value;
+
+  const product = {
+    id:id ? Number(id) : Date.now(),
+
+    name:
+      document.getElementById("pName").value.trim(),
+
+    price:
+      Number(document.getElementById("pPrice").value),
+
+    category:
+      document.getElementById("pCategory").value,
+
+    stock:
+      Number(document.getElementById("pStock").value),
+
+    image:
+      document.getElementById("pImage").value.trim() ||
+      "https://placehold.co/700x500/6c5ce7/ffffff?text=NovaShop",
+
+    description:
+      document.getElementById("pDescription").value.trim(),
+
+    rating:4.5
+  };
+
+  if(id){
+
+    const index =
+      products.findIndex(p=>p.id===Number(id));
+
+    if(index!==-1){
+      products[index]=product;
+    }
+
+    toast("✅ Product updated");
+
+  }else{
+
+    products.push(product);
+    toast("✅ New product added");
+  }
+
+  localStorage.setItem(
+    "novaProducts",
+    JSON.stringify(products)
+  );
+
+  resetProductForm();
+  renderCategories();
+  updateAdmin();
+}
+
+function updateAdmin(){
+
+  document.getElementById("statProducts")
+    .textContent=products.length;
+
+  document.getElementById("statCategories")
+    .textContent=new Set(
+      products.map(p=>p.category)
+    ).size;
+
+  const value =
+    products.reduce(
+      (sum,p)=>sum+(p.price*p.stock),0
+    );
+
+  document.getElementById("statValue")
+    .textContent =
+    "₹"+value.toLocaleString();
+
+  document.getElementById("adminProducts").innerHTML =
+    products.map(p=>`
+
+      <tr>
+
+        <td>
+          <strong>${escapeHTML(p.name)}</strong>
+        </td>
+
+        <td>
+          ₹${p.price.toLocaleString()}
+        </td>
+
+        <td>
+          ${escapeHTML(p.category)}
+        </td>
+
+        <td>
+          ${p.stock}
+        </td>
+
+        <td>
+
+          <button
+            class="edit"
+            onclick="editProduct(${p.id})">
+            ✏️ Edit
+          </button>
+
+          <button
+            class="delete"
+            onclick="deleteProduct(${p.id})">
+            🗑️
+          </button>
+
+        </td>
+
+      </tr>
+
+    `).join("");
+}
+
+function editProduct(id){
+
+  const p =
+    products.find(x=>x.id===id);
+
+  if(!p)return;
+
+  document.getElementById("editId").value=p.id;
+  document.getElementById("pName").value=p.name;
+  document.getElementById("pPrice").value=p.price;
+  document.getElementById("pCategory").value=p.category;
+  document.getElementById("pStock").value=p.stock;
+  document.getElementById("pImage").value=p.image;
+  document.getElementById("pDescription").value=p.description;
+
+  document.getElementById("formTitle")
+    .textContent="✏️ Edit Product";
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+}
+
+function deleteProduct(id){
+
+  const p =
+    products.find(x=>x.id===id);
+
+  if(!p)return;
+
+  if(!confirm(`Delete "${p.name}"?`))
+    return;
+
+  products =
+    products.filter(x=>x.id!==id);
+
+  cart =
+    cart.filter(x=>x.id!==id);
+
+  wishlist =
+    wishlist.filter(x=>x!==id);
+
+  localStorage.setItem(
+    "novaProducts",
+    JSON.stringify(products)
+  );
+
+  saveCart();
+
+  localStorage.setItem(
+    "novaWishlist",
+    JSON.stringify(wishlist)
+  );
+
+  renderCategories();
+  updateAdmin();
+  updateCart();
+  updateWishlist();
+
+  toast("🗑️ Product deleted");
+}
+
+function resetProductForm(){
+
+  document.getElementById("editId").value="";
+  document.getElementById("pName").value="";
+  document.getElementById("pPrice").value="";
+  document.getElementById("pStock").value="";
+  document.getElementById("pImage").value="";
+  document.getElementById("pDescription").value="";
+
+  document.getElementById("formTitle")
+    .textContent="➕ Add New Product";
+}
+
+/* ============================
+   THEME
+============================ */
+
+function toggleTheme(){
+
+  document.body.classList.toggle("dark");
+
+  localStorage.setItem(
+    "novaDark",
+    document.body.classList.contains("dark")
+  );
+}
+
+if(localStorage.getItem("novaDark")==="true"){
+  document.body.classList.add("dark");
+}
+
+/* ============================
+   RANDOM PRODUCT
+============================ */
+
+function randomProduct(){
+
+  if(!products.length)return;
+
+  const p =
+    products[
+      Math.floor(Math.random()*products.length)
+    ];
+
+  viewProduct(p.id);
+}
+
+/* ============================
+   MODAL
+============================ */
+
+function closeModal(id){
+  document.getElementById(id)
+    .classList.remove("show");
+}
+
+/* ============================
+   TOAST
+============================ */
+
+let toastTimer;
+
+function toast(message){
+
+  const el =
+    document.getElementById("toast");
+
+  el.textContent=message;
+  el.classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer=setTimeout(()=>{
+    el.classList.remove("show");
+  },2500);
+}
+
+/* ============================
+   SECURITY HELPERS
+============================ */
+
+function escapeHTML(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+function escapeJS(value){
+  return String(value)
+    .replace(/\\/g,"\\\\")
+    .replace(/'/g,"\\'");
+}
+
+/* ============================
+   CLOSE MODALS ON BACKDROP
+============================ */
+
+document.querySelectorAll(".overlay")
+.forEach(overlay=>{
+
+  overlay.addEventListener("click",e=>{
+
+    if(e.target===overlay){
+      overlay.classList.remove("show");
+    }
+
+  });
+
+});
+
+/* ============================
+   KEYBOARD SHORTCUT
+============================ */
+
+document.addEventListener("keydown",e=>{
+
+  if(e.key==="Escape"){
+
+    document.querySelectorAll(".overlay")
+      .forEach(x=>x.classList.remove("show"));
+
+    closeCart();
+  }
+
+});
+
+/*
+==========================================
+25+ INCLUDED SHOP FEATURES
+==========================================
+
+1. Responsive design
+2. Product search
+3. Category filtering
+4. Price sorting
+5. Rating sorting
+6. Name sorting
+7. Shopping cart
+8. Quantity controls
+9. Stock limits
+10. Wishlist
+11. Product quick view
+12. Product descriptions
+13. Product ratings
+14. Product images
+15. Checkout form
+16. Coupon NOVA10
+17. Dark mode
+18. LocalStorage persistence
+19. Toast notifications
+20. Admin dashboard
+21. Add products
+22. Edit products
+23. Delete products
+24. Stock management
+25. Category management
+26. Product value statistics
+27. Cart statistics
+28. Surprise Me button
+29. Mobile-friendly layout
+30. Keyboard ESC modal closing
+31. Empty search state
+32. Automatic product categories
+33. Admin product table
+34. Product image fallback
+35. Wishlist/cart counters
+
+==========================================
+*/
+</script>
+
+</body>
+</html>
