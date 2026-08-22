@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#2874f0">
+<title>OneShop — Shop & Compare</title>
+<style>
+:root{
+ --primary:#2874f0;--primary2:#1557c0;--accent:#ffb300;--bg:#f1f3f6;--card:#fff;
+ --text:#172033;--muted:#697386;--border:#e1e5ec;--danger:#d93025;--ok:#168a4a;
+ --shadow:0 2px 10px rgba(0,0,0,.08);--radius:12px;
+}
+[data-theme="dark"]{--bg:#0f1720;--card:#17212b;--text:#f4f7fb;--muted:#aeb8c5;--border:#2b3845;--shadow:0 2px 12px rgba(0,0,0,.3)}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+button,input,select{font:inherit}button{cursor:pointer}
+.top{position:sticky;top:0;z-index:80;background:var(--primary);color:#fff;box-shadow:0 2px 8px #0003}
+.nav{max-width:1280px;margin:auto;display:flex;align-items:center;gap:12px;padding:10px 14px;flex-wrap:wrap}
+.logo{font-size:29px;font-weight:900;letter-spacing:-1.2px;white-space:nowrap}.logo span{color:#ffd54a}
+.search{height:48px;flex:1;display:flex;background:#fff;border-radius:5px;overflow:hidden;min-width:220px}
+.search input{flex:1;border:0;outline:0;padding:0 16px;font-size:16px;color:#111}.search button{width:95px;background:#fff;color:var(--primary);font-weight:900}
+.navbtn{background:#fff;color:var(--primary);border-radius:5px;padding:12px 15px;font-weight:900;white-space:nowrap}
+.badge{background:#e53935;color:#fff;border-radius:99px;padding:2px 7px;font-size:12px}
+.main{max-width:1280px;margin:auto}
+.home-strip{display:flex;gap:10px;overflow:auto;padding:12px 14px;background:var(--card);border-bottom:1px solid var(--border)}
+.home-strip button{min-width:105px;padding:11px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-weight:800}
+.home-strip button.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.hero{margin:14px;border-radius:16px;padding:30px 25px;color:#fff;background:linear-gradient(100deg,var(--primary),#6a4df5);box-shadow:var(--shadow)}
+.hero h1{margin:0 0 8px;font-size:35px}.hero p{margin:0;max-width:750px;font-size:17px}
+.cats{display:flex;gap:8px;overflow:auto;padding:4px 14px 14px}.cat{min-width:112px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:13px 10px;text-align:center;font-weight:800}
+.cat .ico{font-size:29px;margin-bottom:5px}
+.banner{margin:0 14px 14px;border-radius:14px;overflow:hidden;min-height:150px;padding:24px;background:linear-gradient(90deg,#ff8a00,#ffd54f);color:#172033}
+.banner h2{margin:0 0 8px;font-size:28px}.banner p{margin:0}
+.toolbar{margin:14px;background:var(--card);border-radius:10px;padding:12px;display:flex;gap:9px;align-items:center;box-shadow:var(--shadow);flex-wrap:wrap}
+.toolbar .grow{flex:1;font-size:20px}.toolbar select{padding:10px;border:1px solid var(--border);border-radius:7px;background:var(--card);color:var(--text)}
+.stores{display:flex;gap:8px;overflow:auto;padding:0 14px 13px}.store-chip{padding:9px 14px;border:1px solid var(--border);border-radius:22px;background:var(--card);color:var(--text);white-space:nowrap;font-weight:800}.store-chip.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.status{margin:0 14px 12px;color:var(--primary);font-weight:800}
+.error{margin:14px;padding:18px;background:var(--card);border-radius:10px;color:var(--danger);box-shadow:var(--shadow)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:0 14px 100px}
+.product{background:var(--card);border-radius:10px;overflow:hidden;box-shadow:var(--shadow);min-width:0}
+.pic{height:245px;background:#fff;display:flex;align-items:center;justify-content:center;position:relative;border-bottom:1px solid var(--border)}
+.pic img{width:100%;height:100%;object-fit:contain;padding:12px}.pic .fallback{font-size:56px}
+.pbody{padding:13px}.store-label{display:inline-block;background:#eef4ff;color:var(--primary);padding:5px 8px;border-radius:6px;font-size:12px;font-weight:900}
+.pname{font-weight:800;font-size:16px;line-height:1.25;margin:9px 0;min-height:40px}
+.price{font-size:23px;font-weight:900}.old{text-decoration:line-through;color:var(--muted);font-size:13px;margin-left:5px}.rating{font-size:13px;color:var(--muted);margin:6px 0 10px}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.add,.view{padding:11px;border-radius:7px;font-weight:900}.add{background:#fff;color:var(--primary);border:1px solid var(--primary)}.view{background:var(--primary);color:#fff}
+.empty{grid-column:1/-1;background:var(--card);padding:35px;text-align:center;border-radius:12px;box-shadow:var(--shadow)}
+.loadmore{display:block;margin:0 auto 100px;background:var(--primary);color:#fff;padding:13px 25px;border-radius:8px;font-weight:900}
+.compare{margin:0 14px 14px;background:var(--card);border-radius:12px;padding:15px;box-shadow:var(--shadow)}.compare h3{margin:0 0 10px}.offers{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.offer{border:1px solid var(--border);border-radius:9px;padding:10px}.offer b{display:block;font-size:20px;margin:5px 0}
+.bottom{position:fixed;bottom:0;left:0;right:0;z-index:70;background:var(--card);border-top:1px solid var(--border)}.bottom>div{max-width:900px;margin:auto;display:flex;justify-content:space-around}.bottom button{background:transparent;color:var(--muted);padding:8px 16px}.bottom button.active{color:var(--primary);font-weight:900}
+.modal{position:fixed;inset:0;background:#0009;z-index:100;display:none;align-items:flex-end;justify-content:center}.modal.show{display:flex}.sheet{background:var(--card);color:var(--text);width:min(800px,100%);max-height:94vh;overflow:auto;border-radius:20px 20px 0 0;padding:20px}.close{float:right;border:0;background:var(--bg);color:var(--text);border-radius:50%;width:38px;height:38px;font-size:24px}
+.form{display:grid;gap:10px}.form input,.form select,.form textarea{width:100%;padding:11px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text)}.form textarea{min-height:90px}.save{background:var(--primary);color:#fff;padding:11px 16px;border-radius:8px;font-weight:900}
+.theme-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.theme-card{border:1px solid var(--border);padding:10px;border-radius:10px}.theme-card button{width:100%;margin-top:8px;padding:11px;border-radius:7px;color:#fff;font-weight:900}
+.admin-tabs{display:flex;gap:8px;overflow:auto;margin-bottom:14px}.admin-tabs button{padding:9px 13px;border-radius:20px;background:var(--bg);color:var(--text);border:0}.admin-tabs .sel{background:var(--primary);color:#fff}
+.toast{position:fixed;bottom:75px;left:50%;transform:translateX(-50%);z-index:200;background:#18212b;color:#fff;padding:11px 16px;border-radius:9px;display:none}.toast.show{display:block}
+.filters{display:flex;gap:8px;overflow:auto;padding:0 14px 14px}.filter-btn{padding:9px 13px;border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:20px;white-space:nowrap}.filter-btn.active{background:var(--primary);color:#fff}
+@media(max-width:900px){.grid{grid-template-columns:repeat(3,1fr)}.offers{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:650px){.nav{padding:8px}.logo{font-size:25px}.search{order:5;flex-basis:100%}.hero h1{font-size:29px}.grid{grid-template-columns:repeat(2,1fr);gap:9px}.pic{height:185px}.pbody{padding:10px}.pname{font-size:14px}.price{font-size:20px}.actions{grid-template-columns:1fr}.cats{padding-top:0}.cat{min-width:95px}.banner{min-height:135px}.toolbar .grow{flex-basis:100%}}
+@media(min-width:1000px){.bottom{display:none}}
+</style>
+</head>
+<body>
+<header class="top">
+ <div class="nav">
+  <div class="logo">One<span>Shop</span></div>
+  <div class="search"><input id="search" placeholder="Search for mobiles, shoes, shirts, TVs and more" autocomplete="off"><button onclick="searchProducts()">Search</button></div>
+  <button class="navbtn" onclick="openAccount()">Account</button>
+  <button class="navbtn" onclick="openCart()">🛒 <span id="cartCount" class="badge">0</span></button>
+  <button class="navbtn" id="themeBtn" onclick="toggleTheme()">🌙 Dark</button>
+  <button class="navbtn" onclick="openAdmin()">Admin</button>
+ </div>
+</header>
+
+<main class="main">
+ <div class="home-strip" id="homeStrip"></div>
+ <section class="hero">
+  <h1>One search. Many stores.</h1>
+  <p>Search a product once, see many matching products, compare prices and open the product on its shopping app.</p>
+ </section>
+ <div class="cats" id="categories"></div>
+ <section class="banner"><h2 id="bannerTitle">Deals, trends & recommendations</h2><p id="bannerText">Search a product to see multiple live matches instead of a single result.</p></section>
+
+ <div class="toolbar">
+  <b class="grow" id="resultTitle">Recommended for you</b>
+  <select id="sort" onchange="render()">
+   <option value="best">Best match</option><option value="low">Price: Low to High</option><option value="high">Price: High to Low</option><option value="rating">Customer rating</option>
+  </select>
+ </div>
+ <div class="filters" id="filters"></div>
+ <div class="stores" id="stores"></div>
+ <div class="status" id="status"></div>
+ <div class="grid" id="products"></div>
+ <button class="loadmore" id="loadMore" onclick="loadMore()" style="display:none">Load more products</button>
+</main>
+
+<div class="bottom"><div>
+ <button class="active" onclick="goHome()">🏠<br>Home</button>
+ <button onclick="selectCategory('Fashion')">👕<br>Fashion</button>
+ <button onclick="selectCategory('Mobiles')">📱<br>Mobiles</button>
+ <button onclick="selectCategory('Electronics')">💻<br>Electronics</button>
+ <button onclick="openCart()">🛒<br>Cart</button>
+</div></div>
+
+<div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* OneShop v2
+   IMPORTANT:
+   This frontend expects your Supabase Edge Function / aggregator to return
+   multiple products. It supports:
+   {products:[...]} OR {data:{products:[...]}} OR {results:[...]}.
+   Recommended query parameters sent by this app:
+   q, store, limit, page, sort.
+*/
+const CONFIG={
+ apiUrl:localStorage.getItem("oneshop_api_url")||"https://YOUR_PROJECT.supabase.co/functions/v1/bright-api",
+ publicAnonKey:localStorage.getItem("oneshop_anon_key")||"",
+ timeout:10000,
+ pageSize:24
+};
+
+/* Shopping apps/marketplaces only. No travel, utility or unrelated sites. */
+const STORES=[
+ {name:"All stores",key:"all"},
+ {name:"Flipkart",key:"flipkart",url:"https://www.flipkart.com"},
+ {name:"Amazon",key:"amazon",url:"https://www.amazon.in"},
+ {name:"Myntra",key:"myntra",url:"https://www.myntra.com"},
+ {name:"Nykaa",key:"nykaa",url:"https://www.nykaa.com"},
+ {name:"JioMart",key:"jiomart",url:"https://www.jiomart.com"},
+ {name:"Meesho",key:"meesho",url:"https://www.meesho.com"},
+ {name:"AJIO",key:"ajio",url:"https://www.ajio.com"},
+ {name:"Tata CLiQ",key:"tatacliq",url:"https://www.tatacliq.com"},
+ {name:"Croma",key:"croma",url:"https://www.croma.com"},
+ {name:"Reliance Digital",key:"reliancedigital",url:"https://www.reliancedigital.in"},
+ {name:"Blinkit",key:"blinkit",url:"https://blinkit.com"},
+ {name:"Zepto",key:"zepto",url:"https://www.zepto.com"},
+ {name:"Swiggy Instamart",key:"instamart",url:"https://www.swiggy.com/instamart"},
+ {name:"BigBasket",key:"bigbasket",url:"https://www.bigbasket.com"}
+];
+
+const CATS=[
+ ["🛍️","For You"],["👕","Fashion"],["📱","Mobiles"],["💻","Electronics"],
+ ["💄","Beauty"],["🏠","Home"],["👟","Footwear"],["🧸","Toys"]
+];
+
+/* Fallback is deliberately a catalog of many products, not one product.
+   Live results replace it when the API is configured. */
+const FALLBACK=[
+ ["Pixel 9a 5G Smartphone","Google",39999,44999,4.5,"Mobiles","Flipkart","📱"],
+ ["Galaxy S25 5G Smartphone","Samsung",74999,84999,4.6,"Mobiles","Amazon","📱"],
+ ["iPhone 16 128 GB","Apple",69999,79900,4.7,"Mobiles","Flipkart","📱"],
+ ["OnePlus 13R 5G","OnePlus",42999,49999,4.5,"Mobiles","Amazon","📱"],
+ ["Nothing Phone (3a) 5G","Nothing",24999,27999,4.4,"Mobiles","Croma","📱"],
+ ["Redmi Note 14 Pro 5G","Xiaomi",25999,31999,4.3,"Mobiles","JioMart","📱"],
+ ["Realme P4s 5G","Realme",19999,22999,4.4,"Mobiles","Flipkart","📱"],
+ ["Vivo V50 5G","Vivo",34999,39999,4.5,"Mobiles","Amazon","📱"],
+ ["Men Regular Fit T-Shirt","Roadster",399,999,4.3,"Fashion","Myntra","👕"],
+ ["Men Slim Fit Jeans","Roadster",899,1999,4.2,"Fashion","Myntra","👖"],
+ ["Women Printed Kurta","Libas",799,1599,4.4,"Fashion","AJIO","👗"],
+ ["Sports Running Shoes","Campus",1299,2499,4.3,"Footwear","Flipkart","👟"],
+ ["Casual Sneakers","Puma",2199,3999,4.5,"Footwear","Myntra","👟"],
+ ["Wireless Bluetooth Headphones","boAt",1299,2990,4.4,"Electronics","Amazon","🎧"],
+ ["Smart LED TV 43 inch","TCL",24999,39999,4.3,"Electronics","Flipkart","📺"],
+ ["Laptop 15.6 inch","HP",55999,69999,4.4,"Electronics","Amazon","💻"],
+ ["Gaming Laptop RTX","ASUS",79999,99999,4.5,"Electronics","Croma","💻"],
+ ["Front Load Washing Machine","LG",32999,45999,4.5,"Home","Reliance Digital","🧺"],
+ ["Air Fryer 4.5 L","Philips",4999,7995,4.4,"Home","JioMart","🍳"],
+ ["Stainless Steel Water Bottle","Milton",349,599,4.5,"Home","BigBasket","🥤"],
+ ["Anti-Dandruff Shampoo","Head & Shoulders",299,399,4.2,"Beauty","Nykaa","🧴"],
+ ["Face Wash 100 ml","Cetaphil",499,599,4.5,"Beauty","Nykaa","🧴"],
+ ["Moisturizer 100 g","Nivea",249,349,4.4,"Beauty","Amazon","🧴"],
+ ["Baby Diaper Pack","Pampers",699,899,4.5,"Home","Blinkit","🧸"]
+].map((x,i)=>({id:"fallback-"+i,name:x[0],brand:x[1],price:x[2],oldPrice:x[3],rating:x[4],category:x[5],store:x[6],emoji:x[7],image:""}));
+
+let allResults=[...FALLBACK], query="", activeStore="all", activeCategory="For You", page=1;
+let cart=JSON.parse(localStorage.getItem("oneshop_cart")||"[]");
+let theme=localStorage.getItem("oneshop_theme")||"light";
+document.documentElement.dataset.theme=theme;
+
+const $=id=>document.getElementById(id);
+function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+function money(v){return "₹"+Number(v||0).toLocaleString("en-IN")}
+function toast(t){$("toast").textContent=t;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),2200)}
+function saveCart(){localStorage.setItem("oneshop_cart",JSON.stringify(cart));$("cartCount").textContent=cart.reduce((n,p)=>n+p.qty,0)}
+function toggleTheme(){theme=theme==="dark"?"light":"dark";localStorage.setItem("oneshop_theme",theme);document.documentElement.dataset.theme=theme;$("themeBtn").textContent=theme==="dark"?"☀️ Bright":"🌙 Dark"}
+function openModal(h){$("sheet").innerHTML=h;$("modal").classList.add("show")}
+function closeModal(){$("modal").classList.remove("show")}
+$("modal").addEventListener("click",e=>{if(e.target.id==="modal")closeModal()});
+
+function init(){
+ $("homeStrip").innerHTML=CATS.slice(0,6).map(c=>`<button onclick="selectCategory('${c[1]}')">${c[0]} ${c[1]}</button>`).join("");
+ $("categories").innerHTML=CATS.map(c=>`<div class="cat" onclick="selectCategory('${c[1]}')"><div class="ico">${c[0]}</div>${c[1]}</div>`).join("");
+ $("stores").innerHTML=STORES.map(s=>`<button class="store-chip ${s.key===activeStore?'active':''}" onclick="selectStore('${s.key}')">${esc(s.name)}</button>`).join("");
+ $("filters").innerHTML=["All","Under ₹500","₹500–₹2,000","₹2,000–₹10,000","₹10,000+","4★ & above"].map((x,i)=>`<button class="filter-btn ${i===0?'active':''}" data-filter="${i}" onclick="priceFilter(${i})">${x}</button>`).join("");
+ $("themeBtn").textContent=theme==="dark"?"☀️ Bright":"🌙 Dark";
+ applySavedAdmin();
+ saveCart();
+ render();
+}
+function selectStore(k){activeStore=k;document.querySelectorAll(".store-chip").forEach(b=>b.classList.toggle("active",b.dataset.store===k));document.querySelectorAll(".store-chip").forEach(b=>b.classList.toggle("active",b.textContent.trim().toLowerCase()===STORES.find(s=>s.key===k)?.name.toLowerCase()));page=1;render()}
+function selectCategory(c){activeCategory=c;page=1;render();scrollTo({top:470,behavior:"smooth"})}
+function goHome(){query="";$("search").value="";activeCategory="For You";activeStore="all";page=1;render();scrollTo({top:0,behavior:"smooth"})}
+
+function matchesFilters(p){
+ if(activeStore!=="all" && normalizeStore(p.store)!==activeStore)return false;
+ if(activeCategory!=="For You" && String(p.category||"").toLowerCase()!==activeCategory.toLowerCase())return false;
+ return true;
+}
+let currentPriceFilter=0;
+function priceFilter(i){currentPriceFilter=i;document.querySelectorAll(".filter-btn").forEach(b=>b.classList.toggle("active",Number(b.dataset.filter)===i));page=1;render()}
+function priceOK(p){
+ const n=Number(p.price||0);
+ return currentPriceFilter===0 ||
+  (currentPriceFilter===1&&n<500)||(currentPriceFilter===2&&n>=500&&n<2000)||
+  (currentPriceFilter===3&&n>=2000&&n<10000)||(currentPriceFilter===4&&n>=10000)||
+  (currentPriceFilter===5&&Number(p.rating||0)>=4);
+}
+function normalizeStore(s){
+ const x=String(s||"").toLowerCase().replace(/[^a-z0-9]/g,"");
+ const map={instamart:"instamart",swiggyinstamart:"instamart",reliancedigital:"reliancedigital",tatacliq:"tatacliq",tata_cliq:"tatacliq"};
+ return map[x]||x;
+}
+function filtered(){
+ let a=allResults.filter(p=>matchesFilters(p)&&priceOK(p));
+ const sort=$("sort").value;
+ if(sort==="low")a.sort((x,y)=>Number(x.price)-Number(y.price));
+ if(sort==="high")a.sort((x,y)=>Number(y.price)-Number(x.price));
+ if(sort==="rating")a.sort((x,y)=>Number(y.rating||0)-Number(x.rating||0));
+ return a;
+}
+function render(){
+ const a=filtered(), visible=a.slice(0,page*CONFIG.pageSize);
+ $("resultTitle").textContent=query?`${visible.length}${a.length>visible.length?"+":""} results for "${query}"`:(activeCategory==="For You"?"Recommended for you":activeCategory);
+ $("status").textContent=query?`${a.length} matching products found`:`${a.length} products available`;
+ $("products").innerHTML=visible.length?visible.map(card).join(""):`<div class="empty"><h2>No products found</h2><p>Try another category, price range or shopping app.</p><button class="view" onclick="goHome()">Back to Home</button></div>`;
+ $("loadMore").style.display=visible.length<a.length?"block":"none";
+}
+function productImage(p){
+ if(p.image)return `<img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">`;
+ return "";
+}
+function card(p){
+ const payload=encodeURIComponent(JSON.stringify(p));
+ return `<article class="product">
+  <div class="pic">${productImage(p)}<div class="fallback" style="${p.image?'display:none':''}">${esc(p.emoji||"🛍️")}</div></div>
+  <div class="pbody">
+   <span class="store-label">${esc(p.store||"Store")}</span>
+   <div class="pname">${esc(p.name||"Product")}</div>
+   <div class="price">${money(p.price)} <span class="old">${p.oldPrice?money(p.oldPrice):""}</span></div>
+   <div class="rating">★ ${Number(p.rating||0).toFixed(1)} ${p.rating_count?`· ${Number(p.rating_count).toLocaleString()} ratings`:""} ${p.quantity?`· ${esc(p.quantity)}`:""}</div>
+   <div class="actions"><button class="add" onclick="addEncoded('${payload}')">Add to cart</button><button class="view" onclick="openEncoded('${payload}')">View</button></div>
+  </div>
+ </article>`;
+}
+function addEncoded(s){addToCart(JSON.parse(decodeURIComponent(s)))}
+function openEncoded(s){openProduct(JSON.parse(decodeURIComponent(s)))}
+function addToCart(p){const i=cart.find(x=>x.id===p.id);if(i)i.qty++;else cart.push({...p,qty:1});saveCart();toast("Added to cart")}
+function openProduct(p){
+ const same=allResults.filter(x=>String(x.name).toLowerCase().trim()===String(p.name).toLowerCase().trim());
+ openModal(`<button class="close" onclick="closeModal()">×</button>
+  <div style="display:grid;gap:14px">
+   <div class="pic" style="height:300px;border:1px solid var(--border);border-radius:10px">${productImage(p)}<div class="fallback" style="${p.image?'display:none':''}">${esc(p.emoji||"🛍️")}</div></div>
+   <span class="store-label">${esc(p.store||"Store")}</span><h2 style="margin:0">${esc(p.name)}</h2>
+   <div class="price">${money(p.price)} ${p.oldPrice?`<span class="old">${money(p.oldPrice)}</span>`:""}</div>
+   <div class="rating">★ ${Number(p.rating||0).toFixed(1)} ${p.rating_count?`· ${Number(p.rating_count).toLocaleString()} ratings`:""}</div>
+   <button class="add" onclick='addToCart(${JSON.stringify(p).replace(/'/g,"&#39;")});closeModal()'>Add to cart</button>
+   ${p.deepLink?`<button class="view" onclick="window.open('${esc(p.deepLink)}','_blank','noopener')">Open in ${esc(p.store||"store")}</button>`:""}
+   <div class="compare"><h3>Compare this product</h3><div class="offers">${(same.length?same:[p]).map(x=>`<div class="offer"><span>${esc(x.store||"Store")}</span><b>${money(x.price)}</b>★ ${Number(x.rating||0).toFixed(1)}</div>`).join("")}</div></div>
+  </div>`);
+}
+function openCart(){
+ const total=cart.reduce((n,p)=>n+Number(p.price||0)*p.qty,0);
+ openModal(`<button class="close" onclick="closeModal()">×</button><h2>Cart (${cart.reduce((n,p)=>n+p.qty,0)})</h2>
+ ${cart.length?cart.map((p,i)=>`<div class="offer" style="margin:8px 0"><b>${esc(p.name)}</b><div>${money(p.price)} × ${p.qty}</div><button class="add" onclick="changeQty(${i},-1)">−</button> <button class="add" onclick="changeQty(${i},1)">+</button></div>`).join(""):`<div class="empty">Your cart is empty.</div>`}
+ <h2>Total ${money(total)}</h2><button class="view" style="width:100%" onclick="toast('Checkout needs your payment/order backend')">Proceed to checkout</button>`);
+}
+function changeQty(i,d){cart[i].qty+=d;if(cart[i].qty<=0)cart.splice(i,1);saveCart();openCart()}
+
+async function searchProducts(){
+ query=$("search").value.trim();
+ if(!query){goHome();return}
+ activeStore="all";activeCategory="For You";page=1;currentPriceFilter=0;
+ document.querySelectorAll(".filter-btn").forEach((b,i)=>b.classList.toggle("active",i===0));
+ document.querySelectorAll(".store-chip").forEach(b=>b.classList.remove("active"));
+ $("status").textContent="Searching shopping apps…";
+ $("products").innerHTML='<div class="empty"><h2>Searching…</h2><p>Getting multiple matching products.</p></div>';
+ $("loadMore").style.display="none";
+
+ if(!CONFIG.apiUrl || CONFIG.apiUrl.includes("YOUR_PROJECT")){
+   allResults=makeFallbackSearch(query);render();
+   $("status").textContent=`Demo catalog: ${filtered().length} matching products. Connect your live aggregator API in Admin → API for real store data.`;
+   return;
+ }
+
+ try{
+   const live=await fetchAllStores(query);
+   if(!live.length)throw new Error("No live products returned");
+   allResults=live;render();
+ }catch(e){
+   allResults=makeFallbackSearch(query);render();
+   $("status").innerHTML=`Live search unavailable (${esc(e.message)}). Showing working fallback catalog.`;
+ }
+}
+async function fetchJSON(url,options){
+ const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),CONFIG.timeout);
+ try{
+  const r=await fetch(url,{...options,signal:controller.signal});
+  const text=await r.text();
+  let data;try{data=JSON.parse(text)}catch{data={}};
+  if(!r.ok)throw new Error("API "+r.status);
+  return data;
+ }finally{clearTimeout(timer)}
+}
+function apiHeaders(){
+ const h={"Content-Type":"application/json"};
+ if(CONFIG.publicAnonKey){h.apikey=CONFIG.publicAnonKey;h.Authorization="Bearer "+CONFIG.publicAnonKey}
+ return h;
+}
+async function fetchAllStores(q){
+ /* One request for ALL stores is preferred: it is faster and avoids 14
+    simultaneous calls. The Edge Function should aggregate the connected
+    shopping applications server-side. */
+ const u=new URL(CONFIG.apiUrl);
+ u.searchParams.set("q",q);u.searchParams.set("query",q);u.searchParams.set("store","all");
+ u.searchParams.set("platform","all");u.searchParams.set("limit","100");u.searchParams.set("page","1");
+ u.searchParams.set("sort","relevance");
+ const data=await fetchJSON(u.toString(),{method:"GET",headers:apiHeaders()});
+ let raw=data?.data?.products||data?.products||data?.data?.results||data?.results||data?.items||[];
+ if(!Array.isArray(raw))raw=[];
+ return raw.map(normalizeProduct).filter(p=>p.name&&Number.isFinite(Number(p.price))&&Number(p.price)>0);
+}
+function normalizeProduct(p){
+ const platform=p.platform?.name||p.platform||p.store?.name||p.store||p.marketplace||"Store";
+ const price=Number(p.offer_price??p.sale_price??p.price??p.current_price??p.mrp??0);
+ return {
+  id:String(p.id||p.product_id||p.sku||crypto.randomUUID()),
+  name:p.name||p.title||p.product_name||"Product",
+  brand:p.brand||p.brand_name||"",
+  price,oldPrice:Number(p.mrp||p.original_price||0)>price?Number(p.mrp||p.original_price):0,
+  rating:Number(p.rating||p.average_rating||0),rating_count:p.rating_count||p.reviews_count||0,
+  quantity:p.quantity||p.size||p.variant||"",
+  store:platform,category:p.category||p.category_name||"",
+  image:(p.images&&p.images[0])||p.image||p.image_url||p.thumbnail||"",
+  deepLink:p.deeplink||p.deep_link||p.product_url||p.url||""
+ };
+}
+function makeFallbackSearch(q){
+ const words=q.toLowerCase().split(/\s+/).filter(Boolean);
+ return FALLBACK.filter(p=>words.some(w=>(p.name+" "+p.brand+" "+p.category).toLowerCase().includes(w)));
+}
+function loadMore(){page++;render()}
+
+function openAccount(){openModal(`<button class="close" onclick="closeModal()">×</button><h2>Account</h2><p>Connect this to Supabase Auth when you are ready.</p><div class="form"><input placeholder="Email or phone"><input type="password" placeholder="Password"><button class="save" onclick="toast('Connect Supabase Auth for real accounts')">Continue</button></div>`)}
+function openAdmin(){
+ openModal(`<button class="close" onclick="closeModal()">×</button><h2>OneShop Admin</h2><div class="form"><input id="adminUser" placeholder="Username"><input id="adminPass" type="password" placeholder="Password"><button class="save" onclick="adminLogin()">Open admin</button></div>`);
+}
+function adminLogin(){if($("adminUser").value==="pranith"&&$("adminPass").value==="5406")showAdmin();else toast("Incorrect admin username or password")}
+function showAdmin(){
+ openModal(`<button class="close" onclick="closeModal()">×</button><h2>Admin control center</h2>
+ <div class="admin-tabs"><button class="sel" onclick="adminThemes()">Themes</button><button onclick="adminApi()">API</button><button onclick="adminContent()">Content</button><button onclick="adminTypography()">Fonts</button><button onclick="adminStores()">Stores</button></div>
+ <div id="adminBody"></div>`);adminThemes();
+}
+const THEMES=[
+ ["Ocean","#2874f0","#1557c0"],["Royal","#5b3cc4","#8a5cf6"],["Emerald","#078c6b","#16b36f"],["Sunset","#f4511e","#ff9800"],
+ ["Rose","#d81b60","#ff5b8d"],["Midnight","#263238","#546e7a"],["Indigo","#3949ab","#7e57c2"],["Teal","#00897b","#26a69a"],["Red","#e53935","#ff7043"]
+];
+function adminThemes(){$("adminBody").innerHTML=`<h3>Website themes</h3><div class="theme-grid">${THEMES.map(t=>`<div class="theme-card"><b>${t[0]}</b><button style="background:linear-gradient(90deg,${t[1]},${t[2]})" onclick="applyTheme('${t[1]}','${t[2]}')">Apply</button></div>`).join("")}</div>`}
+function applyTheme(a,b){document.documentElement.style.setProperty("--primary",a);document.documentElement.style.setProperty("--primary2",b);localStorage.setItem("oneshop_primary",a);localStorage.setItem("oneshop_primary2",b);toast("Theme applied")}
+function adminApi(){$("adminBody").innerHTML=`<h3>Live shopping API</h3><div class="form">
+ <label>Supabase Edge Function / aggregator URL<input id="apiUrl" value="${esc(CONFIG.apiUrl)}"></label>
+ <label>Public anon key (if required)<input id="anonKey" type="password" value="${esc(CONFIG.publicAnonKey)}"></label>
+ <label>Timeout (seconds)<input id="apiTimeout" type="number" min="5" max="30" value="${CONFIG.timeout/1000}"></label>
+ <button class="save" onclick="saveApi()">Save & test later</button>
+ <p>The endpoint should return many products for <code>?q=mobile&store=all&limit=100&page=1</code>. Keep secret/service-role keys on the server, never in this HTML.</p></div>`}
+function saveApi(){CONFIG.apiUrl=$("apiUrl").value.trim();CONFIG.publicAnonKey=$("anonKey").value.trim();CONFIG.timeout=Math.max(5,Math.min(30,Number($("apiTimeout").value)||10))*1000;localStorage.setItem("oneshop_api_url",CONFIG.apiUrl);localStorage.setItem("oneshop_anon_key",CONFIG.publicAnonKey);localStorage.setItem("oneshop_timeout",CONFIG.timeout);toast("API settings saved")}
+function adminContent(){$("adminBody").innerHTML=`<h3>Homepage content</h3><div class="form"><input id="bt" value="${esc(localStorage.getItem("oneshop_banner_title")||"Deals, trends & recommendations")}"><textarea id="bc">${esc(localStorage.getItem("oneshop_banner_text")||"Search a product to see multiple live matches instead of a single result.")}</textarea><button class="save" onclick="saveContent()">Save</button></div>`}
+function saveContent(){localStorage.setItem("oneshop_banner_title",$("bt").value);localStorage.setItem("oneshop_banner_text",$("bc").value);$("bannerTitle").textContent=$("bt").value;$("bannerText").textContent=$("bc").value;toast("Content saved")}
+function adminTypography(){$("adminBody").innerHTML=`<h3>Font & style</h3><div class="form"><select id="fontSel" onchange="applyFont(this.value)"><option>Arial</option><option>Verdana</option><option>Trebuchet MS</option><option>Georgia</option><option>system-ui</option></select><label>Corner radius <input type="range" min="0" max="28" value="${Number(localStorage.getItem("oneshop_radius")||12)}" oninput="applyRadius(this.value)"></label><button class="save" onclick="toast('Style saved')">Apply</button></div>`}
+function applyFont(f){document.body.style.fontFamily=f;localStorage.setItem("oneshop_font",f)}
+function applyRadius(v){document.documentElement.style.setProperty("--radius",v+"px");localStorage.setItem("oneshop_radius",v)}
+function adminStores(){$("adminBody").innerHTML=`<h3>Shopping apps connected</h3><p>Only shopping/e-commerce apps are listed. Your live aggregator must have an approved connector/feed/API for each store.</p><div>${STORES.slice(1).map(s=>`<div class="offer" style="margin:7px 0"><b>${esc(s.name)}</b><br><a href="${s.url}" target="_blank" rel="noopener">${esc(s.url)}</a></div>`).join("")}</div>`}
+function applySavedAdmin(){
+ const a=localStorage.getItem("oneshop_primary"),b=localStorage.getItem("oneshop_primary2"),f=localStorage.getItem("oneshop_font"),r=localStorage.getItem("oneshop_radius");
+ if(a)document.documentElement.style.setProperty("--primary",a);if(b)document.documentElement.style.setProperty("--primary2",b);
+ if(f)document.body.style.fontFamily=f;if(r)document.documentElement.style.setProperty("--radius",r+"px");
+ $("bannerTitle").textContent=localStorage.getItem("oneshop_banner_title")||"Deals, trends & recommendations";
+ $("bannerText").textContent=localStorage.getItem("oneshop_banner_text")||"Search a product to see multiple live matches instead of a single result.";
+ if(localStorage.getItem("oneshop_timeout"))CONFIG.timeout=Number(localStorage.getItem("oneshop_timeout"));
+}
+$("search").addEventListener("keydown",e=>{if(e.key==="Enter")searchProducts()});
+$("sort").addEventListener("change",render);
+init();
+</script>
+</body>
+</html>
